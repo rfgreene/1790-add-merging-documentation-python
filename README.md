@@ -61,6 +61,10 @@ If you have software experience or more specific use cases, start at [INSTALLATI
 
 For more general documentation on the project that is not related to getting set up, including architecture diagrams and engineering decision logs, see [docs/](docs/).
 
+### Combining CEJST Data with Other Sources
+
+A guide to combining data from this tool with data from other sources can be found [here](docs/combining_data.md)!
+
 ## Glossary
 
 Confused about a term? Heard an acronym and have no idea what it stands for? Check out [our glossary](docs/glossary.md)!
