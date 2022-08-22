@@ -12,17 +12,31 @@ Next, ensure you have all necessary libraries. <code>pandas</code> is essential 
 
 ### Downloads
 
-Download all required data into a subfolder within the project folder. For this example we will use the Communities List Data found on the [CEJST website](https://screeningtool.geoplatform.gov/en/downloads) and the 2019 School District Boundaries offered by the [National Center for Educational Statistics](https://nces.ed.gov/programs/edge/Geographic/DistrictBoundaries).
+Download all required data into a subfolder within the project folder. The .csv format is generally easiest for usability and storage efficiency, though Excel files will work as well.
 
 ### Getting Started
 
-If you've installed Python and all necessary libraries, and you have all your data downloaded and organized in the project folder, you're ready to get started! Create a new Python file, open your favorite Python editor, and move on to the next section.
+If you've installed Python and all necessary libraries, and you have all your data downloaded and organized in the project folder, you're ready to get started! Open your favorite Python editor and move on to the next section.
 
 ## Step 1: Merging Geographies
 
-The Justice40 dataset uses 2010 Census tracts as its subunits. If the dataset(s) you wish to combine with the Justice40 data also use 2010 Census tracts, great! Feel free to skip this section and move on to [Step 2](#step-2-performing-a-data-merge). If you are using data with different subunits, read below for information on how to use a crosswalk to obtain tract-level data.
+The Justice40 dataset uses 2010 Census tracts as its geographic units. If the dataset(s) you wish to combine with the Justice40 data also use 2010 Census tracts, great! Feel free to skip this section and move on to [Step 2](#step-2-performing-a-data-merge). If you are using data with different geographic units, read below for information on how to use a crosswalk to obtain tract-level data.
+
+### Obtaining a Crosswalk
+
+A crosswalk is a file that matches two different geographic units together. To merge a dataset that does not use 2010 Census tract geographies with the Justice40 dataset, you will need a crosswalk to match the unit used by the first dataset with the 2010 Census tracts. The crosswalk will transform the "source geography" to the "target geography," so set the target geography to the unit that you would like in your final analysis. Generally, this is likely to be the geography used by the non-Justice 40 dataset. For example, if we wanted to determine the average number of Justice40 criteria exceeded for each elementary school district, we would set 2010 Census tracts as the source geography and elementary school districts as the target geography.
+
+Crosswalks for most geographies can be downloaded from the [Missouri Census Data Center](https://mcdc.missouri.edu/applications/geocorr2014.html) or the [U.S. Census Bureau](https://www.census.gov/geographies/reference-files/time-series/geo/relationship-files.2010.html).
 
 ### Determining the Merge Rule
+
+A merge rule determines how to draw data from multiple source units when a target unit contains more than one source unit. For example, an elementary school district is likely to contain around a dozen or more census tracts. Mean and median are the most commonly used merge rules, though many other merge rules exist, including sum, count, min, max, and mode. Different use cases may require different merge rules, so pick one that works well for your data and needs.
+
+### Writing a Lookup Generator
+
+We are finally ready to write some code! Our first program will generate a lookup. A lookup is a table (likely in .csv format) with two columns: a set of keys, which correspond to the target geographies, and a value corresponding to each key. Common keys may be 5-digit zip codes, a state's postal abbreviation followed by two digits representing a given congressional district, or the name of the elementary school within the school district. The values would be the result of the merge rule for that target geography.
+
+[in progress]
 
 ## Step 2: Performing a Data Merge
 
