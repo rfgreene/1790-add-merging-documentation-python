@@ -42,4 +42,6 @@ We are finally ready to write some code! Our first program will generate a looku
 
 [in progress]
 
+<br>
+
 ##### This guide created by Robert Greene, Harvard University.
