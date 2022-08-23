@@ -40,3 +40,6 @@ We are finally ready to write some code! Our first program will generate a looku
 
 ## Step 2: Performing a Data Merge
 
+[in progress]
+
+##### This guide created by Robert Greene, Harvard University.
