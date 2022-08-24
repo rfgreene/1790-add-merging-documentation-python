@@ -36,6 +36,17 @@ A merge rule determines how to draw data from multiple source units when a targe
 
 We are finally ready to write some code! Our first program will generate a lookup. A lookup is a table (likely in .csv format) with two columns: a set of keys, which correspond to the target geographies, and a value corresponding to each key. Common keys may be 5-digit zip codes, a state's postal abbreviation followed by two digits representing a given congressional district, or the name of the elementary school within the school district. The values would be the result of the merge rule for that target geography.
 
+First, locate your crosswalk and the Justice40 data using pyprojroot, and read those files into DataFrames:
+
+<pre><code>import pandas, pyprojroot
+ 
+crosswalk = pyprojroot.here('./data/inputs/your_crosswalk_filename')
+justice40 = pyprojroot.here('./data/inputs/communities-2022-05-31-1915GMT.csv') #the timestamp on the file may be different depending on when you downloaded the data!
+ 
+lookup = pandas.read_csv(crosswalk)
+communities_df = pandas.read_csv(justice40)
+</code></pre>
+
 [in progress]
 
 ## Step 2: Performing a Data Merge
