@@ -39,8 +39,26 @@ To determine allocation factors based on land area divisions, first ensure you h
 <pre><code>
 import arcpy, pandas, pyprojroot
 
-WRITE CODE HERE
+path = pyprojroot.here('./data/inputs/your_crosswalk_filename.csv')
+df = pandas.read_csv(path)
+zones = pyprojroot.here('./data/inputs/source_unit_shapefile.shp')
+classes = pyprojroot.here('./data/inputs/target_unit_shapefile.shp')
+allocation = pandas.DataFrame()
+
+arcpy.analysis.TabulateIntersection(zones, 'GEOID', classes, 'sdelm14', allocation)
+
+df = merge(df, allocation, 'GEOID', 'sdelm14', 'PERCENTAGE')
+
+df.to_csv(path)
+
+def merge(df1, df2, field1, field2, addfield):
+  newdf = pandas.DataFrame()
+  for i, j in df1.iterrows():
+    TO DO
+
 </pre></code>
+
+
 
 ### Writing a Lookup Generator
 
@@ -51,7 +69,7 @@ First, locate your crosswalk and the Justice40 data using pyprojroot, and read t
 <pre><code>
 import pandas, pyprojroot
  
-crosswalk = pyprojroot.here('./data/inputs/your_crosswalk_filename')
+crosswalk = pyprojroot.here('./data/inputs/your_crosswalk_filename.csv')
 justice40 = pyprojroot.here('./data/inputs/communities-2022-05-31-1915GMT.csv') #the timestamp on the file may be different depending on when you downloaded the data!
  
 lookup = pandas.read_csv(crosswalk)
