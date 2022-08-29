@@ -32,33 +32,7 @@ Crosswalks for most geographies can be downloaded from the [Missouri Census Data
 
 A merge rule determines how to draw data from multiple source units when a target unit contains more than one source unit. For example, an elementary school district is likely to contain around a dozen or more census tracts. Mean and median are the most commonly used merge rules, though many other merge rules exist, including sum, count, min, max, and mode. Different use cases may require different merge rules, so pick one that works well for your data and needs.
 
-In addition to a merge rule, you may wish to weight your data for cases where source units are split across multiple target units. For example, Census Tract 0820.22 in Maricopa County, Arizona contained three elementary school districts in 2014: Litchfield Elementary School District, Littleton Elementary School District, and Pendergast Elementary School District. The tract-to-elementary school district crosswalk contains an allocation factor, which represents the percentage of residents in that tract who live within a given elementary school district. Some crosswalks include allocation factors, but some do not. If an allocation factor is not available, land area may be used as a proxy for population allocation, with the (incorrect) assumption that population is evenly distributed across a census tract. 
-
-To determine allocation factors based on land area divisions, first ensure you have a valid ArcPy license. Then, download shapefiles of both the [Justice40 dataset](https://screeningtool.geoplatform.gov/en/downloads) and the geographies of your secondary data source, which may be available as a [TIGER/Line shapefile](https://www.census.gov/cgi-bin/geo/shapefiles/index.php). From there, you can use <code>arcpy.analysis.TabulateIntersection</code> to generate the percentage of each "zone feature" that is occupied by a given "class feature". Since we wish to determine the percentage of a given source unit (e.g. Census tract) that is within each target unit (e.g. elementary school districts), we will set the zone features to source units and the class features to target units:
-
-<pre><code>
-import arcpy, pandas, pyprojroot
-
-path = pyprojroot.here('./data/inputs/your_crosswalk_filename.csv')
-df = pandas.read_csv(path)
-zones = pyprojroot.here('./data/inputs/source_unit_shapefile.shp')
-classes = pyprojroot.here('./data/inputs/target_unit_shapefile.shp')
-allocation = pandas.DataFrame()
-
-arcpy.analysis.TabulateIntersection(zones, 'GEOID', classes, 'sdelm14', allocation)
-
-df = merge(df, allocation, 'GEOID', 'sdelm14', 'PERCENTAGE')
-
-df.to_csv(path)
-
-def merge(df1, df2, field1, field2, addfield):
-  newdf = pandas.DataFrame()
-  for i, j in df1.iterrows():
-    TO DO
-
-</pre></code>
-
-
+In addition to a merge rule, you may wish to weight your data. Many geographic units, like Census tracts, do not have equal populations, so weighting a mean may provide a more accurate representation of target geographies than raw averages. Also note that source geographies may be split across multiple target geographies. For example, Census tract 0820.22 in Maricopa, Arizona is split between Litchfield Elementary School District, Littleton Elementary School District, and Pendergast Elementary School District. My crosswalk includes population for each intersection (259 people in that tract are within Litchfield Elementary School District, 1350 are within Littleton Elementary School District, and 2562 are within Pendergast Elementary School District). Some crosswalks only provide data for the source geography as a whole (4171 in Census tract 0820.22). In this case, you might approximate the weight for each intersection by dividing the total source geography population by the number of target geographies that include that source geography (4171 / 3 = 1390.33333...). If you do not have data for the population of each unit, you may not be able to establish population-based weights.
 
 ### Writing a Lookup Generator
 
@@ -69,8 +43,9 @@ First, locate your crosswalk and the Justice40 data using pyprojroot, and read t
 <pre><code>
 import pandas, pyprojroot
  
+#Make sure to change these path names to fit your project!
 crosswalk = pyprojroot.here('./data/inputs/your_crosswalk_filename.csv')
-justice40 = pyprojroot.here('./data/inputs/communities-2022-05-31-1915GMT.csv') #the timestamp on the file may be different depending on when you downloaded the data!
+justice40 = pyprojroot.here('./data/inputs/communities-timestamp.csv')
  
 lookup = pandas.read_csv(crosswalk)
 communities_df = pandas.read_csv(justice40)
