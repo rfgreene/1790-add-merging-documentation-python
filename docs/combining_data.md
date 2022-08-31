@@ -51,7 +51,25 @@ lookup = pandas.read_csv(crosswalk)
 communities_df = pandas.read_csv(justice40)
 </code></pre>
 
-Next, 
+Next, tidy up these DataFrames by keeping only the columns that will be used in your merge from the lookup (typically the names or IDs of the source and target geographies, plus the weight field, if applicable) and the source geography name/ID and any columns that will be used in your analysis from the Justice40 dataset. In this example we will use the total categories exceeded and total threshold criteria exceeded columns. We will keep both the county and tract IDs from the lookup to properly format the full tract GEOID for the merge.
+
+<pre><code>
+#Change the column names within the lists depending on your datasets! Make sure to match column names EXACTLY.
+lookup_columns = ['county', 'tract', 'Elementary school district name 2014', 'Total population (2010)']
+justice40_columns = ['Census tract ID', 'Total categories exceeded', 'Total threshold criteria exceeded']
+
+lookup = lookup[lookup_columns]
+communities_df = communities_df[justice40_columns]
+
+communities_df.set_index('Census tract ID',inplace=True)
+
+#format lookup tract IDs to match communities_df - THIS IS FORMAT-DEPENDENT AND JUST A SAMPLE!
+tracts = [0] * len(lookup)
+for i, j in lookup.iterrows():
+  tract = (int)(j[0] + j[1].replace('.', ''))
+</pre></code>
+
+^^check last line of code
 
 [in progress]
 
